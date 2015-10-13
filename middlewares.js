@@ -1,8 +1,7 @@
 (function () {
   'use strict';
 
-  var Cookies = require('./cookies')
-    , users = require('./db').UsersDB
+  var users = require('./db').UsersDB
     , templates = require('./templates');
 
   function isLoggedInByCookie(req) {
@@ -14,7 +13,7 @@
   }
 
   function removeEmailFromCookie(res) {
-    Cookies.remove(res, 'email');
+    res.clearCookie('email');
   }
 
   function ifLoggedIn(req, res, ifLoggedIn, ifLoggedOff) {

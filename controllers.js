@@ -1,8 +1,7 @@
 (function () {
   'use strict';
 
-  var Cookies = require('./cookies')
-    , users = require('./db').UsersDB
+  var users = require('./db').UsersDB
     , templates = require('./templates');
 
   module.exports = {
@@ -29,7 +28,7 @@
     POST: {
       registration: function (req, res) {
         if (users.add(req.body.email)) {
-          Cookies.set(res, 'email', req.body.email);
+          res.cookie('email', req.body.email);
           res.end(templates.registrationSuccess);
         } else {
           res.statusCode = 400;
@@ -38,7 +37,7 @@
       },
       login: function (req, res) {
         if (users.get(req.body.email)) {
-          Cookies.set(res, 'email', req.body.email);
+          res.cookie('email', req.body.email);
           res.end(templates.loginSuccess);
         } else {
           res.statusCode = 400;
@@ -46,7 +45,7 @@
         }
       },
       logout: function (req, res) {
-        Cookies.remove(res, 'email');
+        res.clearCookie('email');
         res.end(templates.logoutSuccess);
       }
     }

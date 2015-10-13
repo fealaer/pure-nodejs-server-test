@@ -3,34 +3,32 @@
 
   const PORT = 8080;
 
-  var http = require('http')
-    , router = new (require('./router'))()
-    , Request = require('./request')
-    , Cookies = require('./cookies')
+  var express = require('express')
+    , app = express()
+    , cookieParser = require('cookie-parser')
+    , bodyParser = require('body-parser')
     , controllers = require('./controllers')
     , middlewares = require('./middlewares');
 
-  router.get('/', controllers.GET.def);
-  router.get('/public', controllers.GET.pub);
-  router.get('/login', middlewares.shouldBeNotLoggedIn, controllers.GET.login);
-  router.get('/registration', middlewares.shouldBeNotLoggedIn, controllers.GET.registration);
-  router.get('/private', middlewares.shouldBeLoggedIn, controllers.GET.priv);
-  router.get('/logout', middlewares.shouldBeLoggedIn, controllers.GET.logout);
+  app.use(cookieParser());
+  app.use(bodyParser.urlencoded({extended: false}));
+  app.use(function (req, res, next) {
+    console.log('%s %s', req.method, req.url);
+    next();
+  });
 
-  router.post('/login', middlewares.shouldBeNotLoggedIn, controllers.POST.login);
-  router.post('/registration', middlewares.shouldBeNotLoggedIn, controllers.POST.registration);
-  router.post('/logout', middlewares.shouldBeLoggedIn, controllers.POST.logout);
+  app.get('/', controllers.GET.def);
+  app.get('/public', controllers.GET.pub);
+  app.get('/login', middlewares.shouldBeNotLoggedIn, controllers.GET.login);
+  app.get('/registration', middlewares.shouldBeNotLoggedIn, controllers.GET.registration);
+  app.get('/private', middlewares.shouldBeLoggedIn, controllers.GET.priv);
+  app.get('/logout', middlewares.shouldBeLoggedIn, controllers.GET.logout);
 
-  function app(req, res) {
-    console.log("%s %s", req.method, req.url);
-    Request.parseBody(req, function () {
-      Cookies.parse(req, function () {
-        router.handleRoute(req, res);
-      });
-    });
-  }
+  app.post('/login', middlewares.shouldBeNotLoggedIn, controllers.POST.login);
+  app.post('/registration', middlewares.shouldBeNotLoggedIn, controllers.POST.registration);
+  app.post('/logout', middlewares.shouldBeLoggedIn, controllers.POST.logout);
 
-  http.createServer(app).listen(PORT, function () {
+  app.listen(PORT, function () {
     console.log("Server listening on: http://localhost:%s", PORT);
   });
 })();
