@@ -1,4 +1,4 @@
-# Simple web app on pure node.js
+# Simple web app on node.js & express
 
 ### App
 
