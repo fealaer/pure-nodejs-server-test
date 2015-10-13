@@ -13,7 +13,7 @@
     static htmlOneInputForm (action, title) {
       return '<form method="post" action="' + action + '">' +
         '<lable for="email">Email</lable>' +
-        '<input id="email" type="email" name="email" placeholder="Email">' +
+        '<input id="email" type="email" name="email" placeholder="Email" required="required">' +
         '<button>' + title + '</button>' +
         '</form>';
     }
