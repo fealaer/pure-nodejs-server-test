@@ -9,6 +9,7 @@
 git clone git@github.com:fealaer/pure-nodejs-server-test.git
 cd pure-nodejs-server-test
 nvm use 4.1.2
+npm install
 ```
 
 ##### Run App
